@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import "./App.css";
-import RegisterUser from "./component/RegisterUser";
+import RegisterUser from "./component/register-user";
 
 function App() {
   return (
