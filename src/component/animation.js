@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "../App.css";
+import Confetti from "react-confetti";
 
-const Animation = ({ children }) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    setIsAnimating(true);
-
-    const timeout = setTimeout(() => {
-      setIsAnimating(false);
-    }, 2000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  return <div className={isAnimating ? "animation" : ""}>{children}</div>;
-};
+function Animation() {
+  const fullScreenConfettiStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+  };
+  return <Confetti style={fullScreenConfettiStyle} />;
+}
 
 export default Animation;

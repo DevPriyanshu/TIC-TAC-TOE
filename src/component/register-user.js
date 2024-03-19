@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Button, Stack, Box } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 import Game from "./game";
 import GroupIcon from "@mui/icons-material/Group";

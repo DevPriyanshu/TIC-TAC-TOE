@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import Animation from "./animation";
+import Animation from "./animation.js";
 import Square from "./square.js";
 import { calculateWinner } from "./game";
 
@@ -47,7 +47,9 @@ function Board({
       >
         {status} {winner && "🍻"}
       </Typography>
+
       {winner && <Animation />}
+
       <Grid container spacing={1} justifyContent="center">
         {[0, 1, 2].map((row) => (
           <Grid
@@ -65,6 +67,7 @@ function Board({
                 winningLine && winningLine.includes(index);
               return (
                 <Square
+                  key={col}
                   value={squares[index]}
                   onSquareClick={() => handleClick(index)}
                   isWinningSquare={isWinningSquare}
