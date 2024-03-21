@@ -76,6 +76,9 @@ export function calculateWinner(squares) {
       return squares[a];
     }
   }
+  if (squares.every(square => square !== null)) {
+    return 'draw'; // If all squares are filled but no winner, it's a draw
+  }
   return null;
 }
 

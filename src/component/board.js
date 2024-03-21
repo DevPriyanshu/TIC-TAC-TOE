@@ -35,6 +35,15 @@ function Board({
       "It's your move," + (firstPlayerIsNext ? players[0] : players[1]) + " !";
   }
 
+  function validateWinner(status) {
+    const firstCharType = status[0];
+    if (firstCharType === "W") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <Box sx={{ textAlign: "center" }}>
       <Typography
@@ -45,10 +54,11 @@ function Board({
           marginBottom: 10,
         }}
       >
-        {status} {winner && "🍻"}
+        {winner === "draw" ? "Match Draw" : status}
+   
       </Typography>
 
-      {winner && <Animation />}
+      {winner !== "draw" && validateWinner(status) && <Animation />}
 
       <Grid container spacing={1} justifyContent="center">
         {[0, 1, 2].map((row) => (
@@ -71,6 +81,7 @@ function Board({
                   value={squares[index]}
                   onSquareClick={() => handleClick(index)}
                   isWinningSquare={isWinningSquare}
+                  isWinner={winner}
                 />
               );
             })}
