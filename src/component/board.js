@@ -44,6 +44,9 @@ function Board({
     }
   }
 
+  function isPlayAgainBtnDisable() {
+    return winner || status === "Match Draw";
+  }
   return (
     <Box sx={{ textAlign: "center" }}>
       <Typography
@@ -55,7 +58,6 @@ function Board({
         }}
       >
         {winner === "draw" ? "Match Draw" : status}
-   
       </Typography>
 
       {winner !== "draw" && validateWinner(status) && <Animation />}
@@ -90,7 +92,7 @@ function Board({
       </Grid>
       <Button
         variant="contained"
-        disabled={!winner}
+        disabled={!isPlayAgainBtnDisable()}
         sx={{
           backgroundColor: "red",
           marginTop: 10,
