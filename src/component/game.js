@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Board from "./board";
 import { calculateWinningLine } from "./board";
 
-function Game({ players }) {
+function Game({ players, singlePlayerMode }) {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const firstPlayerIsNext = currentMove % 2 === 0;
@@ -12,6 +12,29 @@ function Game({ players }) {
   const [countdown, setCountdown] = useState(3);
   const [winningLine, setWinningLine] = useState(null);
 
+  useEffect(() => {
+    if (singlePlayerMode && !firstPlayerIsNext) {
+      const timer = setTimeout(() => {
+        const nextSquares = [...currentSquares];
+        let index;
+        do {
+          index = Math.floor(Math.random() * 9); // Generate a random move
+        } while (nextSquares[index] !== null); // Ensure the generated move is valid
+        nextSquares[index] = players[1]; // Assign the move to the computer
+        handlePlay(nextSquares);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [
+    currentMove,
+    firstPlayerIsNext,
+    players,
+    currentSquares,
+    singlePlayerMode,
+    handlePlay,
+  ]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function handlePlay(nextSquares) {
     const winner = calculateWinner(nextSquares);
     if (winner) {
@@ -76,8 +99,8 @@ export function calculateWinner(squares) {
       return squares[a];
     }
   }
-  if (squares.every(square => square !== null)) {
-    return 'draw'; // If all squares are filled but no winner, it's a draw
+  if (squares.every((square) => square !== null)) {
+    return "draw"; // If all squares are filled but no winner, it's a draw
   }
   return null;
 }

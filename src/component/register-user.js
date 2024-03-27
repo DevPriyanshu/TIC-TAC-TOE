@@ -5,11 +5,14 @@ import { Typography } from "@mui/material";
 import Game from "./game";
 import GroupIcon from "@mui/icons-material/Group";
 import Footer from "./footer";
+import { Computer, PlayArrow } from "@mui/icons-material";
 
 function RegisterUser() {
   const [players, setPlayers] = useState([]);
   const [isPlayerCreated, setIsPlayerCreated] = useState(false);
   const [validationMsg, setValidationMsg] = useState("");
+  const [singlePlayerMode, setSinglePlayerMode] = useState(false);
+  const [isModeSlected, setIsModeSelected] = useState(false);
 
   const handleFirstPlayerChange = (event) => {
     const firstPlayer = event.target.value;
@@ -21,17 +24,33 @@ function RegisterUser() {
     setPlayers((prevPlayers) => [prevPlayers[0], secondPlayer]);
   };
 
-  const handleCreatePlayer = () => {
+  function handlePlayerChangeForSolo(event) {
+    const playerName = event.target.value;
+    const randomPlayer = "Computer";
+    setPlayers([playerName, randomPlayer]);
+  }
+
+  const handlePlayBtn = () => {
     if (
       players.length === 2 &&
-      players.every((player) => player.trim() !== "")
+      (players.every((player) => player.trim() !== "") || singlePlayerMode)
     ) {
       setIsPlayerCreated(true);
+    } else if (singlePlayerMode) {
+      setValidationMsg("Player name must be filled.");
     } else {
-      setValidationMsg("Please ensure that both player names are filled.");
+      setValidationMsg("Player(s) names must be filled.");
     }
   };
 
+  function handleDuelPlayer() {
+    setIsModeSelected(true);
+  }
+
+  function handleSinglePlayer() {
+    setIsModeSelected(true);
+    setSinglePlayerMode(true);
+  }
   return (
     <>
       <Stack
@@ -43,7 +62,7 @@ function RegisterUser() {
         width="100vw"
       >
         {isPlayerCreated ? (
-          <Game players={players} />
+          <Game players={players} singlePlayerMode={singlePlayerMode} />
         ) : (
           <Stack
             backgroundColor="white"
@@ -56,18 +75,59 @@ function RegisterUser() {
             <Typography variant="h6" sx={{ fontFamily: "cursive" }}>
               {"TIC TAC TOE GAME"}
             </Typography>
-            <TextField
-              placeholder="Enter 1st Player"
-              label="1st Player"
-              value={players[0] || ""}
-              onChange={handleFirstPlayerChange}
-            />
-            <TextField
-              label="2nd Player"
-              placeholder="Enter 2nd Player"
-              value={players[1] || ""}
-              onChange={handleSecondPlayerChange}
-            />
+
+            {isModeSlected && (
+              <>
+                {singlePlayerMode ? (
+                  <>
+                    <TextField
+                      label="Player Name"
+                      placeholder="Enter Player"
+                      value={players[0] || ""}
+                      onChange={handlePlayerChangeForSolo}
+                    />
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "blue",
+                        marginTop: 2,
+                      }}
+                      startIcon={<PlayArrow />}
+                      onClick={handlePlayBtn}
+                    >
+                      Start the game
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <TextField
+                      placeholder="Enter 1st Player"
+                      label="1st Player"
+                      value={players[0] || ""}
+                      onChange={handleFirstPlayerChange}
+                    />
+                    <TextField
+                      label="2nd Player"
+                      placeholder="Enter 2nd Player"
+                      value={players[1] || ""}
+                      onChange={handleSecondPlayerChange}
+                    />
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "blue",
+                        marginTop: 2,
+                      }}
+                      startIcon={<PlayArrow />}
+                      onClick={handlePlayBtn}
+                    >
+                      Start the game
+                    </Button>
+                  </>
+                )}
+              </>
+            )}
+
             {validationMsg !== "" && (
               <Typography
                 variant="caption"
@@ -77,19 +137,40 @@ function RegisterUser() {
                 {validationMsg}
               </Typography>
             )}
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "red",
-                "&:hover": {
-                  backgroundColor: "#b51307",
-                },
-              }}
-              onClick={handleCreatePlayer}
-              startIcon={<GroupIcon />}
-            >
-              Create Player
-            </Button>
+
+            {!isModeSlected && (
+              <>
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "100%",
+                    backgroundColor: "red",
+                    "&:hover": {
+                      backgroundColor: "#b51307",
+                    },
+                  }}
+                  onClick={handleDuelPlayer}
+                  startIcon={<GroupIcon />}
+                >
+                  Play Duel with a friend
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "100%",
+                    backgroundColor: "blue",
+                    "&:hover": {
+                      backgroundColor: "#007bff",
+                    },
+                    marginTop: 2,
+                  }}
+                  startIcon={<Computer />}
+                  onClick={handleSinglePlayer}
+                >
+                  Challenge the computer
+                </Button>
+              </>
+            )}
           </Stack>
         )}
 
